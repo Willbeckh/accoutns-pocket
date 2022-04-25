@@ -13,8 +13,15 @@ class User:
         self.login = login
 
     def new_user(self):
-        print(f'Your account details= username: { self.username }, passcode: { self.login }')
-        
+        return f'Success: { self.username } - { self.login }'
+
     def save_user(self):
         """saves user account to user_account list"""
         User.user_account.append(self)
+        return self
+
+    @classmethod
+    def display_users(cls):
+        """Displays a list of all available users"""
+        cls.user_account
+        

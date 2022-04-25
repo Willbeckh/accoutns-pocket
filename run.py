@@ -6,7 +6,7 @@ import random, string
 
 def create_user(username, login):
     """"Creates a new user account"""
-    new_user = User("billy", "#Pass123")
+    new_user = User(username, login)
     return new_user
 
 def save_new_user(account):
@@ -19,10 +19,6 @@ def display_users(password):
 
 def generate_password(pass_length=8):
     """Method to generate random passwords"""
-    CHARS = string.ascii_letters
-    DIGITS = string.digits
-    SYMBOLS = string.punctuation
-
     while True:
         try:
             # REQUEST USER FOR PASS LENGTH
@@ -34,14 +30,14 @@ def generate_password(pass_length=8):
 
         else:
             # join all items to form a password
-            combinedChars = CHARS + DIGITS + SYMBOLS
+            combinedChars = string.ascii_letters+ string.digits + string.punctuation
 
             passcode = ''
             if pass_length < 8:
                 print("password length is too small!")
-            elif pass_length > 16:
-                print("password length cannot be more than 16 characters.")
-                print("-"*10)
+            # elif pass_length > 16:
+            #     print("password length cannot be more than 16 characters.")
+            #     print("-"*10)
             else: 
                 for lentgh in range(pass_length):
                     passcode += random.choice(combinedChars)
@@ -51,27 +47,28 @@ def generate_password(pass_length=8):
 # credentials code
 def create_account(account_name, password):
     """Creates a new account"""
-    new_credentials = Credentials("twitter", "#twitterPASS")
+    new_credentials = Credentials(account_name, password)
+    return new_credentials
 
 def create_credentials(details):
     """Saves a new credentials to the credentials object"""
-    details.save_credentials()
+    return details.save_credentials()
     
 def delete_credentials(details):
     """Deletes a users account credentials
     """
-    details.delete_credentials()
+    return details.delete_credentials()
 
 def find_credentials(account):
     """Method to find a user's credentials"""
+    print(account)
     return Credentials.find_by_name(account)
 
-def display_credentials(account_name):
-    """Finds available accounts by account name
-    Returns:
-        the contact
+def display_credentials():
     """
-    return Credentials.find_by_name(account_name)
+    Returns all the saved account credentials.
+    """
+    return Credentials.display_credentials()
 
 def copy_credentials(account_name):
     """Copy credentials to the clipboard
@@ -82,16 +79,15 @@ def copy_credentials(account_name):
 def main():
     os.system("clear")
 
-    print("Hello! Welcome to Password Locker. Use c- to create account")
+    print("Hello! Welcome to Password Locker. Use command: c - to create account, q - to quit")
     while True:
-        short_code = input().lower()
+        short_code = input("type code: ").lower()
 
         if short_code == 'c':
             print("Create account")
             print("-"*10)
 
-            print("Please provide your username: ")
-            username = input()
+            username = input("Please provide your username: ")
 
             print("-"*10)
             answer = input("would you like to generate a password? y/n? ").lower()
@@ -102,36 +98,71 @@ def main():
             elif answer == 'n':
                 password = input("Please provide your password: ")
             created_user = save_new_user(create_user(username, password))
-            # print(f'Created user: {created_user.username}')
+            print(created_user)
 
             print("\n")
             print(f"Account Created Successfully: username: {username} - passcode: {password}")
             print("-"*10)
             print("\n")
             break
-    #     else: 
-
+        elif short_code == 'q':
+            print("Goodbye!")
+            # ! this doesn't quit the app, just termintates the first while loop
+            # TODO: make the code to close app.
+            break
+        
+        elif short_code != 'c':
+            print("please use available commands: c - to create account or e - to exit")
+              
+        # TODO: hide codes for interacting with locker if user is not authenticated
+           
+    # adding credentials
     while True:
-        print("Here are available codes: \n ca - create an account \n dc - display credentials \n fc - find account credentials \n  ex - exit the application \n")
+        print("Use below codes: \n ca - create an account \n dc - display credentials \n fc - find account credentials \n d - to delete account credentisla \n q - exit the application \n")
 
-        short_code = input().lower()
+        short_code = input("type code: ").lower()
         if short_code == 'ca':
             print("New account")
             print("-"*10)
+            account_name = input("Account name: ")
+            password = input("Password: ")
 
-            print("Account name: ")
-            account_name = input()
-
-            print("Password: ")
-            password = input()
-
-            save_new_user(create_user(username, password))
+            create_credentials(create_account(account_name, password))
             print('-'*10)
-            print(f"New account '{account_name}' created successfully")
-            print('\n')
+            print(f"New account '{account_name}' created successfully!")
+            print('-'*10)
+       
+        # display credentials
+        elif short_code == 'dc':
+            print("Display credentials")
+            print("-"*10)
+                 
+            if display_credentials():
+                print(" \t --- Here is a list of all your credentials ---")
 
+                for credentials in display_credentials():
+                    print(f"Account: {credentials.account_name} - Password: {credentials.password}")
+                print('-'*10)
+                print("\n")
+                
+            else:
+                print("You don't seem to have any credentials saved yet")
+                print('\n') 
+   
+   
+        elif short_code == 'fc':
+            pass
+
+
+        elif short_code == 'd':
+            pass
         
-
+        elif short_code == 'q':
+            print("\n")
+            print("****** Safely exiting the application ******")
+            print("\n")
+            break
+        
 # run the app
 if __name__ == '__main__':
     main()

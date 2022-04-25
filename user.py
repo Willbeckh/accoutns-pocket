@@ -24,4 +24,5 @@ class User:
     def display_users(cls):
         """Displays a list of all available users"""
         cls.user_account
+        return cls.user_account
         

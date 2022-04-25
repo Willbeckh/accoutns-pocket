@@ -38,8 +38,8 @@ class Credentials:
     @classmethod
     def display_credentials(cls):
         """method that returns the credentials list"""
-        return cls.accounts
-
+        return cls.accounts      
+    
     @classmethod
     def copy_credentials(cls, account_name):
         """method that copies a credentials password to the clipboard

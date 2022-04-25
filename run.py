@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.8
+import os
 from user import User
 from credentials import Credentials
 import random, string
@@ -10,14 +11,17 @@ def create_user(username, login):
 
 def save_new_user(account):
     """Saves a new user to the user object"""
-    account.save_user()
+    return account.save_user()
 
-def generate_password():
+def display_users(password):
+    """Displays all saved accounts"""
+    return User.display_users(password)
+
+def generate_password(pass_length=8):
     """Method to generate random passwords"""
     CHARS = string.ascii_letters
     DIGITS = string.digits
     SYMBOLS = string.punctuation
-
 
     while True:
         try:
@@ -37,11 +41,12 @@ def generate_password():
                 print("password length is too small!")
             elif pass_length > 16:
                 print("password length cannot be more than 16 characters.")
+                print("-"*10)
             else: 
                 for lentgh in range(pass_length):
                     passcode += random.choice(combinedChars)
                 print(f"Your passcode is: {passcode}")
-                break
+                return passcode
 
 # credentials code
 def create_account(account_name, password):
@@ -75,14 +80,40 @@ def copy_credentials(account_name):
 
 # main app runner
 def main():
-    print("Hello! Welcome to Password Locker. What is your name? ")
-    user_name = input()
-    print(f"Hello {user_name}. What would you like to do?")
-    print('\n')
+    os.system("clear")
+
+    print("Hello! Welcome to Password Locker. Use c- to create account")
+    while True:
+        short_code = input().lower()
+
+        if short_code == 'c':
+            print("Create account")
+            print("-"*10)
+
+            print("Please provide your username: ")
+            username = input()
+
+            print("-"*10)
+            answer = input("would you like to generate a password? y/n? ").lower()
+            password = ''
+            if answer == 'y':
+                password = generate_password()
+            
+            elif answer == 'n':
+                password = input("Please provide your password: ")
+            created_user = save_new_user(create_user(username, password))
+            # print(f'Created user: {created_user.username}')
+
+            print("\n")
+            print(f"Account Created Successfully: username: {username} - passcode: {password}")
+            print("-"*10)
+            print("\n")
+            break
+    #     else: 
 
     while True:
         print("Here are available codes: \n ca - create an account \n dc - display credentials \n fc - find account credentials \n  ex - exit the application \n")
-    
+
         short_code = input().lower()
         if short_code == 'ca':
             print("New account")
@@ -94,8 +125,8 @@ def main():
             print("Password: ")
             password = input()
 
-            save_new_user(create_user(user_name, password))
-            print('\n')
+            save_new_user(create_user(username, password))
+            print('-'*10)
             print(f"New account '{account_name}' created successfully")
             print('\n')
 

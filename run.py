@@ -61,7 +61,6 @@ def delete_credentials(details):
 
 def find_credentials(account):
     """Method to find a user's credentials"""
-    print(account)
     return Credentials.find_by_name(account)
 
 def display_credentials():
@@ -118,6 +117,9 @@ def main():
            
     # adding credentials
     while True:
+        # TODO: how to check wrong codes. 
+        # NOTE: 
+        # """PLACE THE SHORT CODES IN A LIST AND LOOP USING THE INPUTTED CODE"""
         print("Use below codes: \n ca - create an account \n dc - display credentials \n fc - find account credentials \n d - to delete account credentisla \n q - exit the application \n")
 
         short_code = input("type code: ").lower()
@@ -125,8 +127,13 @@ def main():
             print("New account")
             print("-"*10)
             account_name = input("Account name: ")
-            password = input("Password: ")
-
+            
+            choice = input("would you like to generate a password? Y .").lower()
+            if choice == 'y':
+                password = generate_password()
+            else:
+                password = input("Please provide your password: ")
+                
             create_credentials(create_account(account_name, password))
             print('-'*10)
             print(f"New account '{account_name}' created successfully!")
@@ -151,7 +158,22 @@ def main():
    
    
         elif short_code == 'fc':
-            pass
+            # NOTE: GET account using acc_name
+            credentials = input("Enter the account name you want to search for: ")
+            print('-'*10)
+            # NOTE: condtion to check if account exists
+            if display_credentials(): # displays all contacts available
+                # NOTE: if account exists, display credentials
+                result = find_credentials(credentials)
+                print(f"Account name: {result.account_name}")
+                print(f"password: {result.password}")
+                print('-'*10)
+                print("\n")
+                
+            else:
+                print("*"*10)
+                print("You don't seem to have any credentials saved yet")
+                print('\n')
 
 
         elif short_code == 'd':

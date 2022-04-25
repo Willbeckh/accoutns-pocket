@@ -32,10 +32,15 @@ def generate_password():
             combinedChars = CHARS + DIGITS + SYMBOLS
 
             passcode = ''
-            for length in range(pass_length):
-                passcode += random.choice(combinedChars)
-            print(f"Your passcode is: {passcode}")
-            break
+            if pass_length < 8:
+                print("password length is too small!")
+            elif pass_length > 16:
+                print("password length cannot be more than 16 characters.")
+            else: 
+                for lentgh in range(pass_length):
+                    passcode += random.choice(combinedChars)
+                print(f"Your passcode is: {passcode}")
+                break
 
 # credentials code
 def create_account(account_name, password):

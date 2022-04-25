@@ -21,6 +21,11 @@ class TestUser(unittest.TestCase):
         self.new_user.save_user()
         self.assertEqual(len(User.user_account), 1)
 
+    def test_display_users(self):
+        """"test_display_users test case to display a list of availbale users"""
+
+        
+
 
 if __name__ == '__main__':
     unittest.main()

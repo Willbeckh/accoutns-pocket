@@ -1,5 +1,7 @@
 # os settings
 .vscode/
+*_.pyc
 
 # project files
 __pycache__/
+package.json

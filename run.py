@@ -22,7 +22,7 @@ def generate_password(pass_length=8):
     while True:
         try:
             # REQUEST USER FOR PASS LENGTH
-            pass_length = int(input("Please provide the length of the password (min 8, max 16): "))
+            pass_length = int(input("Input password length(min 8): "))
 
         except ValueError:
             print("Oops, you did not provide a number!")
@@ -54,7 +54,7 @@ def create_credentials(details):
     """Saves a new credentials to the credentials object"""
     return details.save_credentials()
     
-def delete_credentials(details):
+def delete_account_credentials(details):
     """Deletes a users account credentials
     """
     return details.delete_credentials()
@@ -78,7 +78,7 @@ def copy_credentials(account_name):
 def main():
     os.system("clear")
 
-    print("Hello! Welcome to Password Locker. Use command: c - to create account, q - to quit")
+    print("Hello! Welcome to Password Locker.\n Use command: c - to create account, q - to quit")
     while True:
         short_code = input("type code: ").lower()
 
@@ -87,23 +87,26 @@ def main():
             print("-"*10)
 
             username = input("Please provide your username: ")
-
-            print("-"*10)
-            answer = input("would you like to generate a password? y/n? ").lower()
-            password = ''
-            if answer == 'y':
-                password = generate_password()
+            if username == '':
+                username = input("Please enter a username: ")
+                print("-"*10)
+            else: 
+                print("-"*10)
+                answer = input("would you like to generate a password? y/n? ").lower()
+                password = ''
+                if answer == 'y':
+                    password = generate_password()
+                
+                elif answer == 'n':
+                    password = input("Please provide your password: ")
             
-            elif answer == 'n':
-                password = input("Please provide your password: ")
-            created_user = save_new_user(create_user(username, password))
-            print(created_user)
-
-            print("\n")
-            print(f"Account Created Successfully: username: {username} - passcode: {password}")
-            print("-"*10)
-            print("\n")
-            break
+                created_user = save_new_user(create_user(username, password))
+                print("\n")
+                print(f"Account Created Successfully: username: {username} - passcode: {password}")
+                print("-"*10)
+                print("\n")
+                break
+            
         elif short_code == 'q':
             print("Goodbye!")
             # ! this doesn't quit the app, just termintates the first while loop
@@ -117,10 +120,7 @@ def main():
            
     # adding credentials
     while True:
-        # TODO: how to check wrong codes. 
-        # NOTE: 
-        # """PLACE THE SHORT CODES IN A LIST AND LOOP USING THE INPUTTED CODE"""
-        print("Use below codes: \n ca - create an account \n dc - display credentials \n fc - find account credentials \n d - to delete account credentisla \n q - exit the application \n")
+        print("Use below codes: \n ca - create an account \n dc - display credentials \n fc - find account credentials \n d - to delete account credentials \n q - exit the application \n")
 
         short_code = input("type code: ").lower()
         if short_code == 'ca':
@@ -128,24 +128,25 @@ def main():
             print("-"*10)
             account_name = input("Account name: ")
             
-            choice = input("would you like to generate a password? Y .").lower()
+            choice = input("would you like to generate a password? Y/n .").lower()
             if choice == 'y':
                 password = generate_password()
             else:
-                password = input("Please provide your password: ")
+                password = input("Please create a password: ")
                 
             create_credentials(create_account(account_name, password))
             print('-'*10)
-            print(f"New account '{account_name}' created successfully!")
+            print(f"New account '{account_name}' created.")
             print('-'*10)
+            print('\n')
        
         # display credentials
         elif short_code == 'dc':
-            print("Display credentials")
             print("-"*10)
+            print("\n")
                  
             if display_credentials():
-                print(" \t --- Here is a list of all your credentials ---")
+                print("--- CREDENTIALS ---")
 
                 for credentials in display_credentials():
                     print(f"Account: {credentials.account_name} - Password: {credentials.password}")
@@ -156,10 +157,10 @@ def main():
                 print("You don't seem to have any credentials saved yet")
                 print('\n') 
    
-   
+        # search for accounts
         elif short_code == 'fc':
             # NOTE: GET account using acc_name
-            credentials = input("Enter the account name you want to search for: ")
+            credentials = input("Enter the account name to search for: ")
             print('-'*10)
             # NOTE: condtion to check if account exists
             if display_credentials(): # displays all contacts available
@@ -175,9 +176,22 @@ def main():
                 print("You don't seem to have any credentials saved yet")
                 print('\n')
 
-
+        # delete credentials.
         elif short_code == 'd':
-            pass
+            credentials = input("Enter the account name you want to search for: ")
+            print("*"*10)
+            if display_credentials():
+                response = find_credentials(credentials)
+                response.delete_credentials()
+                print("successfully deleted an account")
+            else:
+                print("Cannot find an account with that name.")
+                
+            print("*"*10)
+            print("\n")
+            # pass
+        
+        # TODO: copy a password
         
         elif short_code == 'q':
             print("\n")

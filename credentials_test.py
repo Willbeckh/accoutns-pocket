@@ -28,7 +28,7 @@ class TestCredentials(unittest.TestCase):
         
 
     def tearDown(self):
-        """method that cleans up after each test"""
+        """method that cleans up after each test case is run"""
         Credentials.accounts = []
 
     def test_display_credentials(self):

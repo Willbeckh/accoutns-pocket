@@ -17,11 +17,11 @@ class Credentials:
 
     def save_credentials(self):
         """method that saves credentials objects into the credentials list"""
-        Credentials.accounts.append(self)
+        return Credentials.accounts.append(self)
 
     def delete_credentials(self):
         """method that deletes a saved credentials from the credentials list"""
-        Credentials.accounts.remove(self)
+        return Credentials.accounts.remove(self)
 
     @classmethod
     def find_by_name(self, name):
@@ -38,8 +38,8 @@ class Credentials:
     @classmethod
     def display_credentials(cls):
         """method that returns the credentials list"""
-        return cls.accounts
-
+        return cls.accounts      
+    
     @classmethod
     def copy_credentials(cls, account_name):
         """method that copies a credentials password to the clipboard
